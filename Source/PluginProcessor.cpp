@@ -22,9 +22,14 @@ SimpleGainAudioProcessor::SimpleGainAudioProcessor()
                        )
 #endif
 {
-    addParameter (new juce::AudioParameterFloat ("gain", "Gain", 0.0f, 1.0f, 1.0f));
+    //addParameter (new juce::AudioParameterFloat ("gain", "Gain", 0.0f, 1.0f, 1.0f));
     //juce::AudioProcessorParameter * parameter = new juce::AudioParameterFloat ("gain", "Gain", 0.0f, 1.0f, 1.0f);
     //addParameter(parameter);
+
+    // Register Klang SimpleGain's parameters instead
+    const klang::Control& control = kgain.controls[0];
+    addParameter(new juce::AudioParameterFloat(0, control.name.c_str(), control.min, control.max, control.initial));
+    
 }
 
 SimpleGainAudioProcessor::~SimpleGainAudioProcessor()
@@ -134,7 +139,7 @@ bool SimpleGainAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 
 void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    // Obtain total number of input channels
+    /* // Obtain total number of input channels
     auto totalNumInputChannels  = getTotalNumInputChannels();
 
     // Obtain the value for the gain parameter
@@ -149,7 +154,19 @@ void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         //  for each float in the float chain, multiply it by 0.2.
         for (int i = 0; i < buffer.getNumSamples(); ++i)
             channelData[i] *= gain;
-    }
+    } */
+
+    // Update the Klang Synth's parameters (may have changed)
+    for (unsigned int c = 0; c < kgain.controls.size(); c++)
+        kgain.controls[c].set(getParameters()[c]->getValue());
+
+    // Setup the buffers for processing in Klang
+    klang::buffer left(buffer.getWritePointer(0), buffer.getNumSamples());
+    klang::buffer right(buffer.getWritePointer(1), buffer.getNumSamples());
+    
+    // Process buffers in Klang's SimpleGain
+    kgain.klang::Effect::process(left);
+    kgain.klang::Effect::process(right);
 }
 
 //==============================================================================

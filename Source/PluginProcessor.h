@@ -9,6 +9,8 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "klang.h"
+#include "SimpleGain.k"
 
 //==============================================================================
 /**
@@ -54,6 +56,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    SimpleGain kgain;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleGainAudioProcessor)
 };

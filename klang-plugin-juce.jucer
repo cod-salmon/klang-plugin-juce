@@ -4,6 +4,8 @@
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="qmPatT" name="klang-plugin-juce">
     <GROUP id="{2C08BF2A-1629-CDEA-BAA3-C4D2DD0131C9}" name="Source">
+      <FILE id="yE5iyU" name="SimpleGain.k" compile="0" resource="1" file="Source/SimpleGain.k"/>
+      <FILE id="abi19L" name="klang.h" compile="0" resource="0" file="Source/klang.h"/>
       <FILE id="HPBDDz" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="ayqzme" name="PluginProcessor.h" compile="0" resource="0"
