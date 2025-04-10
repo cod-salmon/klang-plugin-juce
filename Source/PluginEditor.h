@@ -14,11 +14,11 @@
 //==============================================================================
 /**
 */
-class KlangPluginAudioProcessorEditor  : public juce::AudioProcessorEditor
+class SimpleGainAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    KlangPluginAudioProcessorEditor (KlangPluginAudioProcessor&);
-    ~KlangPluginAudioProcessorEditor() override;
+    SimpleGainAudioProcessorEditor (SimpleGainAudioProcessor&);
+    ~SimpleGainAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -27,7 +27,7 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    KlangPluginAudioProcessor& audioProcessor;
+    SimpleGainAudioProcessor& audioProcessor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KlangPluginAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleGainAudioProcessorEditor)
 };

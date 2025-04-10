@@ -13,12 +13,12 @@
 //==============================================================================
 /**
 */
-class KlangPluginAudioProcessor  : public juce::AudioProcessor
+class SimpleGainAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    KlangPluginAudioProcessor();
-    ~KlangPluginAudioProcessor() override;
+    SimpleGainAudioProcessor();
+    ~SimpleGainAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -55,5 +55,5 @@ public:
 
 private:
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KlangPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleGainAudioProcessor)
 };
