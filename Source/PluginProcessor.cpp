@@ -19,7 +19,11 @@ SimpleGainAudioProcessor::SimpleGainAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), apvts (*this, 
+                                 nullptr, 
+                                 "STATE", 
+                                 {std::make_unique<juce::AudioParameterFloat> ("gain", "Gain",  0.0f, 1.0f, 0.5f)}
+                                )
 #endif
 {
     //addParameter (new juce::AudioParameterFloat ("gain", "Gain", 0.0f, 1.0f, 1.0f));
@@ -27,8 +31,8 @@ SimpleGainAudioProcessor::SimpleGainAudioProcessor()
     //addParameter(parameter);
 
     // Register Klang SimpleGain's parameters instead
-    const klang::Control& control = kgain.controls[0];
-    addParameter(new juce::AudioParameterFloat(0, control.name.c_str(), control.min, control.max, control.initial));
+    //const klang::Control& control = kgain.controls[0];
+    //addParameter(new juce::AudioParameterFloat(0, control.name.c_str(), control.min, control.max, control.initial));
     
 }
 
@@ -139,12 +143,14 @@ bool SimpleGainAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 
 void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    /* // Obtain total number of input channels
+    // Obtain total number of input channels
     auto totalNumInputChannels  = getTotalNumInputChannels();
 
     // Obtain the value for the gain parameter
-    juce::AudioProcessorParameter* gainParameter = getParameters()[0];
-    float gain = gainParameter->getValue();
+    //juce::AudioProcessorParameter* gainParameter = getParameters()[0];
+    //float gain = gainParameter->getValue();
+    float gain = apvts.getParameter("gain")->getValue();
+
     // Loop over each of them
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -154,9 +160,9 @@ void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         //  for each float in the float chain, multiply it by 0.2.
         for (int i = 0; i < buffer.getNumSamples(); ++i)
             channelData[i] *= gain;
-    } */
+    }
 
-    // Update the Klang Synth's parameters (may have changed)
+    /* // Update the Klang Synth's parameters (may have changed)
     for (unsigned int c = 0; c < kgain.controls.size(); c++)
         kgain.controls[c].set(getParameters()[c]->getValue());
 
@@ -166,7 +172,7 @@ void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     
     // Process buffers in Klang's SimpleGain
     kgain.klang::Effect::process(left);
-    kgain.klang::Effect::process(right);
+    kgain.klang::Effect::process(right); */
 }
 
 //==============================================================================
@@ -177,22 +183,26 @@ bool SimpleGainAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* SimpleGainAudioProcessor::createEditor()
 {
-    //return new SimpleGainAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor (*this);
+    return new SimpleGainAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================
 void SimpleGainAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    // Takes the AudioProcessorValueTreeState instance that we declared 
+    //  in the AudioProcessor's class and passes its data onto destData
+    if (auto xmlState = apvts.copyState().createXml())
+        copyXmlToBinary (*xmlState, destData);
 }
 
 void SimpleGainAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    // Gets pointer to "data" and its size "sizeInBytes", converts it into Xml
+    //  and from Xml, we obtain a new AudioProcessorValueTreeState with which
+    //  to replace our current AudioProcessorValueTreeState state.
+    if (auto xmlState = getXmlFromBinary (data, sizeInBytes))
+        apvts.replaceState (juce::ValueTree::fromXml (*xmlState));
 }
 
 //==============================================================================

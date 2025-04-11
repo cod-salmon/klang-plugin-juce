@@ -11,8 +11,13 @@
 
 //==============================================================================
 SimpleGainAudioProcessorEditor::SimpleGainAudioProcessorEditor (SimpleGainAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p), 
+    gainSliderAttachment (p.apvts, "gain", gainSlider)
 {
+    gainSlider.setSliderStyle (juce::Slider::SliderStyle::LinearVertical);
+    gainSlider.setTextBoxStyle (juce::Slider::TextBoxBelow, true, 200, 30);
+    addAndMakeVisible (gainSlider);
+    
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
@@ -25,16 +30,12 @@ SimpleGainAudioProcessorEditor::~SimpleGainAudioProcessorEditor()
 //==============================================================================
 void SimpleGainAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (15.0f));
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    // Fill the whole background will black color
+    g.fillAll(juce::Colours::black);
 }
 
 void SimpleGainAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    // Set the bounds of the gain's slider to the window bounds
+    gainSlider.setBounds(getLocalBounds());
 }

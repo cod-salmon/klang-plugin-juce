@@ -12,7 +12,7 @@ namespace BinaryData
 //================== SimpleGain.k ==================
 static const unsigned char temp_binary_data_0[] =
 "\r\n"
-"#include <klang.h>\r\n"
+"#include \"klang.h\"\r\n"
 "using namespace klang::optimised;\r\n"
 "\r\n"
 "struct SimpleGain : Effect {\r\n"
@@ -20,7 +20,7 @@ static const unsigned char temp_binary_data_0[] =
 "\t// Initialise plugin (called once at startup)\r\n"
 "\tSimpleGain() {\r\n"
 "\t\tcontrols = { \r\n"
-"\t\t\tDial(\"Gain\", 0.0, 1.0, 0.5),\r\n"
+"\t\t\tDial(\"Gain\", 0.0, 2.0, 0.25),\r\n"
 "\t\t};\r\n"
 "\t}\r\n"
 "\r\n"
@@ -45,7 +45,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes)
 
     switch (hash)
     {
-        case 0xa220581d:  numBytes = 340; return SimpleGain_k;
+        case 0xa220581d:  numBytes = 341; return SimpleGain_k;
         default: break;
     }
 

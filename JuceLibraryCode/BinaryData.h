@@ -9,7 +9,7 @@
 namespace BinaryData
 {
     extern const char*   SimpleGain_k;
-    const int            SimpleGain_kSize = 340;
+    const int            SimpleGain_kSize = 341;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
     const int namedResourceListSize = 1;
